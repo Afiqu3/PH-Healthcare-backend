@@ -7,7 +7,7 @@ import {
 	UserStatus,
 } from "../../../generated/prisma/enums";
 import config from "../../config";
-import { googleClient } from "../../config/googleAuth";
+import { googleClient } from "../../lib/googleAuth";
 import { prisma } from "../../lib/prisma";
 import { jwtUtils } from "../../utils/jwt";
 import type {
