@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import httpStatus from "http-status";
+import { AppError } from "../../utils/AppError";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { AppointmentServices } from "./appointment.service";
@@ -9,7 +10,7 @@ const bookAppointment = catchAsync(async (req: Request, res: Response) => {
 	const user = req.user;
 
 	if (!user) {
-		throw new Error("No User found!");
+		throw new AppError(httpStatus.UNAUTHORIZED, "No User found!");
 	}
 
 	const result = await AppointmentServices.bookAppointment(payload, user);
@@ -26,7 +27,7 @@ const payAppointment = catchAsync(async (req: Request, res: Response) => {
 	const user = req.user;
 
 	if (!user) {
-		throw new Error("No User found!");
+		throw new AppError(httpStatus.UNAUTHORIZED, "No User found!");
 	}
 
 	const result = await AppointmentServices.payAppointment(payload, user);

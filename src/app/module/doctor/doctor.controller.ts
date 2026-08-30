@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import httpStatus from "http-status";
+import { AppError } from "../../utils/AppError";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { DoctorServices } from "./doctor.service";
@@ -15,7 +16,10 @@ const applyAsDoctor = catchAsync(async (req: Request, res: Response) => {
 	);
 
 	if (!zodValidationResult.success) {
-		throw new Error(zodValidationResult.error.issues[0].message);
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			zodValidationResult.error.issues[0].message,
+		);
 	}
 
 	const payload = zodValidationResult.data;
@@ -51,7 +55,7 @@ const approveDoctor = catchAsync(async (req: Request, res: Response) => {
 	const user = req.user;
 
 	if (!user) {
-		throw new Error("No User found!");
+		throw new AppError(httpStatus.UNAUTHORIZED, "No User found!");
 	}
 
 	const result = await DoctorServices.approveDoctor(payload, user);
